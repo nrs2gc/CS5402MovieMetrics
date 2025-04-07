@@ -3,8 +3,7 @@ import pandas as pd
 
 #init commit
 def main():
-    data = pd.read_csv('./data/movie_data.csv')
-    print(data)
+    return
 
 if __name__ == "__main__":
     main()
