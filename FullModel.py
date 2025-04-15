@@ -51,7 +51,7 @@ class ActorScoreCalculator:
     
     def fit(self, df):
         required_cols = ['actor_1_name', 'actor_2_name', 'actor_3_name', 'imdb_score', 'genres']
-        if not all(col in df.columns for col in required_cols):
+        if not all(col in df.columns for col in required_cols): #if all columns in required cols are not in input data frame columns raise Value Err
             raise ValueError("DataFrame is missing required columns for actor scoring")
         
         self.actor_ratings = {}
@@ -67,11 +67,11 @@ class ActorScoreCalculator:
                 if pd.isna(actor) or actor == 'Unknown':
                     continue
                     
-                if actor not in self.actor_ratings:
+                if actor not in self.actor_ratings: #create new actor entry
                     self.actor_ratings[actor] = score
                     self.actor_movie_counts[actor] = 1
                     self.actor_genres[actor] = set(genres)
-                else:
+                else: #increment current movie count by one, recalc actor rating avg, and update actor's genres if need be
                     current_count = self.actor_movie_counts[actor]
                     current_avg = self.actor_ratings[actor]
                     new_avg = (current_avg * current_count + score) / (current_count + 1)
@@ -200,7 +200,7 @@ class MovieFeatureTransformer:
             index=df.index
         )
         
-        df['director_name'] = df['director_name'].fillna('Unknown')
+        df['director_name'] = df['director_name'].fillna('Unknown') #replace Null values
         known_directors = set(self.le_director.classes_)
         df['director_name'] = df['director_name'].apply(lambda x: x if x in known_directors else 'Unknown')
         df['director_encoded'] = self.le_director.transform(df['director_name'])
